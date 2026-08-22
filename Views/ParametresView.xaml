@@ -1,0 +1,70 @@
+<UserControl x:Class="GestionCommerciale.Views.ParametresView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16" MaxWidth="640" HorizontalAlignment="Left">
+
+            <TextBlock Text="Paramètres" Style="{StaticResource SectionTitle}" />
+
+            <TextBlock Text="{Binding MessageConfirmation}"
+                       Foreground="#2E7D32" FontWeight="Medium"
+                       Margin="0,0,0,8" TextWrapping="Wrap"
+                       Visibility="{Binding MessageConfirmation, Converter={StaticResource StringToVisibilityConverter}}" />
+            <TextBlock Text="{Binding MessageErreur}"
+                       Foreground="{DynamicResource ValidationErrorBrush}"
+                       Margin="0,0,0,8" TextWrapping="Wrap"
+                       Visibility="{Binding MessageErreur, Converter={StaticResource StringToVisibilityConverter}}" />
+
+            <!-- Informations de l'entreprise -->
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="OfficeBuilding" VerticalAlignment="Center" />
+                        <TextBlock Text="Informations de l'entreprise" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                    </StackPanel>
+
+                    <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Nom de l'entreprise"
+                             Text="{Binding NomEntreprise, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,16" />
+
+                    <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Devise (ex : FC, USD)"
+                             Text="{Binding Devise, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,16" />
+
+                    <Button Content="ENREGISTRER" HorizontalAlignment="Right"
+                            Style="{StaticResource PrimaryActionButton}"
+                            Command="{Binding EnregistrerCommand}" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Sauvegarde et restauration -->
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="DatabaseCogOutline" VerticalAlignment="Center" />
+                        <TextBlock Text="Sauvegarde &amp; restauration" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                    </StackPanel>
+
+                    <TextBlock Text="Toutes vos données (produits, clients, ventes) sont stockées localement dans une base SQLite. Faites des sauvegardes régulières pour éviter toute perte."
+                               TextWrapping="Wrap" Opacity="0.7" Margin="0,0,0,16" />
+
+                    <TextBlock Text="{Binding CheminBaseDeDonnees, StringFormat='Emplacement : {0}'}"
+                               FontSize="11" Opacity="0.5" TextWrapping="Wrap" Margin="0,0,0,16" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="SAUVEGARDER" Style="{StaticResource PrimaryActionButton}"
+                                Command="{Binding SauvegarderBaseCommand}" />
+                        <Button Content="RESTAURER" Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="8,4,4,4"
+                                Command="{Binding RestaurerBaseCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,79 @@
+<UserControl x:Class="GestionCommerciale.Views.AideView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16" MaxWidth="720" HorizontalAlignment="Left">
+
+            <TextBlock Text="Aide" Style="{StaticResource SectionTitle}" />
+            <TextBlock Text="Guide rapide d'utilisation de Kahuzi ERP." Opacity="0.7" Margin="0,0,0,16" />
+
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ViewDashboard" VerticalAlignment="Center" />
+                            <TextBlock Text="Tableau de bord" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
+                               Text="Vue d'ensemble de votre activité : nombre de produits en stock, clients enregistrés, ventes réalisées et chiffre d'affaires total. Les alertes de stock signalent les produits dont la quantité restante est faible." />
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PackageVariantClosed" VerticalAlignment="Center" />
+                            <TextBlock Text="Stock" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
+                               Text="Ajoutez, modifiez ou supprimez vos produits. Chaque produit possède une référence unique, un prix de vente et une quantité en stock. Le système vous alerte automatiquement lorsqu'un produit passe sous le seuil défini." />
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountGroup" VerticalAlignment="Center" />
+                            <TextBlock Text="Clients" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
+                               Text="Gérez votre fichier client : nom, téléphone, email et adresse. La recherche en haut de la page vous permet de retrouver rapidement un client existant." />
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CartOutline" VerticalAlignment="Center" />
+                            <TextBlock Text="Ventes" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
+                               Text="Créez une nouvelle vente en choisissant un client, un mode de paiement et les produits achetés. Le stock est automatiquement décrémenté à la validation. Annuler une vente restaure le stock des produits concernés." />
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card Style="{StaticResource SectionCard}">
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CogOutline" VerticalAlignment="Center" />
+                            <TextBlock Text="Paramètres" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
+                               Text="Personnalisez le nom de votre entreprise et la devise utilisée. Pensez également à sauvegarder régulièrement votre base de données pour ne jamais perdre vos données." />
+                </Expander>
+            </materialDesign:Card>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

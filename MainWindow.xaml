@@ -1,0 +1,276 @@
+<Window x:Class="GestionCommerciale.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:vm="clr-namespace:GestionCommerciale.ViewModels"
+        xmlns:views="clr-namespace:GestionCommerciale.Views"
+        Title="Kahuzi ERP"
+        Icon="pack://application:,,,/Resources/kahuzi_taskbar_icon.png"
+        WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        Height="720"
+        Width="1200"
+        MinHeight="560"
+        MinWidth="960"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="36"
+                            CornerRadius="0"
+                            GlassFrameThickness="0"
+                            ResizeBorderThickness="5"
+                            UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StockViewModel}">
+            <views:StockView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ClientsViewModel}">
+            <views:ClientsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:VentesViewModel}">
+            <views:VentesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ParametresViewModel}">
+            <views:ParametresView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AideViewModel}">
+            <views:AideView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AProposViewModel}">
+            <views:AProposView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Barre de titre personnalisée -->
+            <Border Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Background="{DynamicResource SidebarBackgroundBrush}"
+                    Height="36">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center">
+                        <Image Source="pack://application:,,,/Resources/kahuzi_emblem_white.png"
+                               Width="18"
+                                Height="18"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="Kahuzi ERP — Gestion Commerciale"
+                                   Foreground="White"
+                                   Opacity="0.9"
+                                   FontSize="12"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="MinimizeButton"
+                                Click="MinimizeButton_Click"
+                                Style="{StaticResource TitleBarButton}">
+                            <materialDesign:PackIcon Kind="WindowMinimize"
+                                    Width="14"
+                                    Height="14"/>
+                        </Button>
+                        <Button x:Name="MaximizeRestoreButton"
+                                Click="MaximizeRestoreButton_Click"
+                                Style="{StaticResource TitleBarButton}">
+                            <materialDesign:PackIcon x:Name="MaximizeRestoreIcon"
+                                    Kind="WindowMaximize"
+                                    Width="14"
+                                    Height="14"/>
+                        </Button>
+                        <Button x:Name="CloseButton"
+                                Click="CloseButton_Click"
+                                Style="{StaticResource TitleBarCloseButton}">
+                            <materialDesign:PackIcon Kind="WindowClose"
+                                    Width="14"
+                                    Height="14"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Panneau de navigation latéral -->
+            <materialDesign:ColorZone Grid.Row="1"
+                    Grid.Column="0"
+                                      Mode="Custom"
+                                      Background="{DynamicResource SidebarBackgroundBrush}"
+                                      Panel.ZIndex="1"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Foreground="White">
+                <DockPanel LastChildFill="True"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+
+                    <!-- En-tête / logo -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Margin="16,24,16,20">
+                        <Image Source="pack://application:,,,/Resources/kahuzi_emblem_white.png"
+                               Width="48"
+                               Height="48"
+                               HorizontalAlignment="Center"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="KAHUZI ERP"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"
+                                   FontWeight="Bold"
+                                   FontSize="16"
+                                   Foreground="White"/>
+                        <TextBlock Text="Bukavu Enterprise"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,0"
+                                   FontSize="11"
+                                   Opacity="0.8"
+                                   Foreground="White"/>
+                    </StackPanel>
+
+                    <!-- Switch thème + bouton paramètres en bas -->
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Margin="16"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="WeatherSunny"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,4,0"/>
+                        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
+                                      Command="{Binding BasculerThemeCommand}"/>
+                        <materialDesign:PackIcon Kind="WeatherNight"
+                                                 VerticalAlignment="Center"
+                                                 Margin="4,0,12,0"/>
+
+                        <!-- Bouton engrenage : ouvre Paramètres / Aide / À propos -->
+                        <materialDesign:PopupBox StaysOpen="False"
+                                                  PlacementMode="TopAndAlignCentres"
+                                                  ToolTip="Plus d'options"
+                                                  Foreground="White">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="CogOutline" Width="20" Height="20"/>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button Content="Paramètres"
+                                        HorizontalContentAlignment="Left"
+                                        Command="{Binding NaviguerVersCommand}"
+                                        CommandParameter="Parametres">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button Content="Aide"
+                                        HorizontalContentAlignment="Left"
+                                        Command="{Binding NaviguerVersCommand}"
+                                        CommandParameter="Aide">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button Content="À propos"
+                                        HorizontalContentAlignment="Left"
+                                        Command="{Binding NaviguerVersCommand}"
+                                        CommandParameter="APropos">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+
+                    <!-- Menu de navigation -->
+                    <ListBox x:Name="NavListBox"
+                             SelectedValuePath="Tag"
+                             SelectionChanged="NavListBox_SelectionChanged"
+                             Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
+                             Background="Transparent"
+                             BorderThickness="0">
+                        <ListBoxItem Tag="Dashboard"
+                                     Style="{StaticResource NavListBoxItem}"
+                                     IsSelected="True">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ViewDashboard"
+                                                         Margin="0,0,12,0"
+                                                         Foreground="White"/>
+                                <TextBlock Text="Tableau de bord"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Tag="Stock"
+                                     Style="{StaticResource NavListBoxItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PackageVariantClosed"
+                                                         Margin="0,0,12,0"
+                                                         Foreground="White"/>
+                                <TextBlock Text="Stock"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Tag="Clients"
+                                     Style="{StaticResource NavListBoxItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountGroup"
+                                                         Margin="0,0,12,0"
+                                                         Foreground="White"/>
+                                <TextBlock Text="Clients"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Tag="Ventes"
+                                     Style="{StaticResource NavListBoxItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CartOutline"
+                                                         Margin="0,0,12,0"
+                                                         Foreground="White"/>
+                                <TextBlock Text="Ventes"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:ColorZone>
+
+            <!-- Contenu principal -->
+            <ContentControl Grid.Row="1"
+                    Grid.Column="1"
+                            Content="{Binding CurrentViewModel}"/>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

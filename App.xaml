@@ -1,0 +1,26 @@
+<Application x:Class="GestionCommerciale.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:GestionCommerciale.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light"
+                              PrimaryColor="Teal"
+                              SecondaryColor="Amber"
+                              ColorAdjustment="{materialDesign:ColorAdjustment}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+                <ResourceDictionary Source="Themes/AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibleConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:BoolToAlertBrushConverter x:Key="BoolToAlertBrushConverter" />
+            <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#0F766E" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
