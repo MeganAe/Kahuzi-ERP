@@ -4,13 +4,40 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Grid>
+        <!-- Contenu principal -->
         <DockPanel LastChildFill="True" Margin="16">
 
-            <TextBlock DockPanel.Dock="Top" Text="Ventes" Style="{StaticResource SectionTitle}" />
+            <!-- Barre d'en-tête -->
+            <Grid DockPanel.Dock="Top" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <Button DockPanel.Dock="Top" Content="+ NOUVELLE VENTE" HorizontalAlignment="Right"
-                    Style="{StaticResource PrimaryActionButton}"
-                    Command="{Binding OuvrirNouvelleVenteCommand}" Margin="0,0,0,12" />
+                <TextBlock Grid.Column="0" Text="Gestion des Ventes &amp; Facturation" Style="{StaticResource SectionTitle}" Margin="0" VerticalAlignment="Center" />
+
+                <TextBox Grid.Column="2" Style="{StaticResource SearchTextBox}"
+                         Text="{Binding TexteRecherche, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                         materialDesign:HintAssist.Hint="Rechercher une vente..."
+                         VerticalAlignment="Center" Margin="0,0,12,0" />
+            </Grid>
+
+            <!-- Barre d'actions supérieures -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,12">
+                <Button Content="EXPORTER CSV"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ExporterCsvCommand}"
+                        Margin="0,0,8,0" />
+                <Button Content="+ NOUVELLE VENTE"
+                        Style="{StaticResource PrimaryActionButton}"
+                        Command="{Binding OuvrirNouvelleVenteCommand}" />
+            </StackPanel>
+
+            <TextBlock DockPanel.Dock="Top" Text="{Binding MessageErreur}" Foreground="{DynamicResource ValidationErrorBrush}"
+                       Margin="0,0,0,8" TextWrapping="Wrap"
+                       Visibility="{Binding MessageErreur, Converter={StaticResource StringToVisibilityConverter}}" />
 
             <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0">
                 <DataGrid ItemsSource="{Binding Ventes}"
@@ -20,21 +47,36 @@
                           materialDesign:DataGridAssist.ColumnHeaderPadding="12,10"
                           CanUserAddRows="False" GridLinesVisibility="Horizontal">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="N°" Binding="{Binding Numero}" Width="150" />
+                        <DataGridTextColumn Header="N° Vente" Binding="{Binding Numero}" Width="150" />
                         <DataGridTextColumn Header="Date" Binding="{Binding DateVente, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="140" />
-                        <DataGridTextColumn Header="Client" Binding="{Binding Client.NomComplet}" Width="160" />
-                        <DataGridTextColumn Header="Paiement" Binding="{Binding ModePaiement}" Width="100" />
+                        <DataGridTextColumn Header="Client" Binding="{Binding Client.NomComplet, TargetNullValue='Client Comptant'}" Width="*" />
+                        <DataGridTextColumn Header="Paiement" Binding="{Binding ModePaiement}" Width="110" />
                         <DataGridTextColumn Header="Statut" Binding="{Binding Statut}" Width="90" />
-                        <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={}{0:N0} FC}" Width="120" />
-                        <DataGridTemplateColumn Header="Actions" Width="100">
+                        <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={}{0:N0} FC}" Width="130" />
+                        <DataGridTemplateColumn Header="Actions" Width="140">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignIconButton}"
-                                            Command="{Binding DataContext.AnnulerVenteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}" ToolTip="Annuler la vente"
-                                            Visibility="{Binding EstAnnulable, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <materialDesign:PackIcon Kind="CloseCircleOutline" />
-                                    </Button>
+                                    <StackPanel Orientation="Horizontal">
+                                        <!-- Détails / Facture -->
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.VoirDetailsVenteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}" ToolTip="Voir la Facture / Reçu">
+                                            <materialDesign:PackIcon Kind="ReceiptTextOutline" />
+                                        </Button>
+                                        <!-- Impression directe -->
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.ImprimerFactureCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}" ToolTip="Imprimer">
+                                            <materialDesign:PackIcon Kind="PrinterOutline" />
+                                        </Button>
+                                        <!-- Annuler -->
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.AnnulerVenteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}" ToolTip="Annuler la vente"
+                                                Visibility="{Binding EstAnnulable, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <materialDesign:PackIcon Kind="CloseCircleOutline" Foreground="{DynamicResource ValidationErrorBrush}" />
+                                        </Button>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -46,12 +88,12 @@
         <!-- Overlay nouvelle vente -->
         <Grid Visibility="{Binding AfficherFormulaire, Converter={StaticResource BoolToVisibilityConverter}}"
               Background="#88000000">
-            <materialDesign:Card Width="620" MaxHeight="680" Padding="24"
+            <materialDesign:Card Width="640" MaxHeight="700" Padding="24"
                                   HorizontalAlignment="Center" VerticalAlignment="Center"
                                   UniformCornerRadius="8">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <TextBlock Text="Nouvelle vente" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16" />
+                        <TextBlock Text="Nouvelle Vente" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16" />
 
                         <ComboBox ItemsSource="{Binding ClientsDisponibles}" SelectedItem="{Binding ClientChoisi}"
                                   DisplayMemberPath="NomComplet"
@@ -62,7 +104,7 @@
                                   materialDesign:HintAssist.Hint="Mode de paiement" Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                   Margin="0,0,0,16" />
 
-                        <TextBlock Text="Ajouter un produit" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8" />
+                        <TextBlock Text="Ajouter des articles" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8" />
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -74,7 +116,7 @@
 
                             <ComboBox Grid.Column="0" ItemsSource="{Binding ProduitsDisponibles}" SelectedItem="{Binding ProduitChoisi}"
                                       DisplayMemberPath="Nom"
-                                      materialDesign:HintAssist.Hint="Produit" Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                                      materialDesign:HintAssist.Hint="Article" Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
                             <TextBox Grid.Column="2" Text="{Binding QuantiteChoisie, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="Qté" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
@@ -117,6 +159,8 @@
 
                         <TextBlock Text="{Binding TotalPanier, StringFormat='Total : {0:N0} FC'}"
                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                   FontWeight="Bold"
                                    HorizontalAlignment="Right" Margin="0,0,0,20" />
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -124,6 +168,97 @@
                                     Command="{Binding FermerFormulaireCommand}" Margin="0,0,8,0" />
                             <Button Content="VALIDER LA VENTE" Style="{StaticResource PrimaryActionButton}"
                                     Command="{Binding ValiderVenteCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Overlay Visualisation de Facture / Reçu -->
+        <Grid Visibility="{Binding AfficherDetailsVente, Converter={StaticResource BoolToVisibilityConverter}}"
+              Background="#88000000">
+            <materialDesign:Card Width="580" MaxHeight="680" Padding="24"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  UniformCornerRadius="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <!-- En-tête Facture -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="KAHUZI ERP" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                                <TextBlock Text="Facture / Reçu de Vente" Opacity="0.7" FontSize="12" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding VenteDetails.Numero}" FontWeight="Bold" FontSize="16" HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding VenteDetails.DateVente, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Opacity="0.7" FontSize="12" HorizontalAlignment="Right" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Margin="0,0,0,16" />
+
+                        <!-- Informations Client & Règlement -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Client :" FontWeight="SemiBold" FontSize="12" Opacity="0.6" />
+                                <TextBlock Text="{Binding VenteDetails.Client.NomComplet, TargetNullValue='Client Comptant / Occasionnel'}" FontWeight="Medium" FontSize="14" />
+                                <TextBlock Text="{Binding VenteDetails.Client.Telephone}" Opacity="0.8" FontSize="12" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <TextBlock Text="Paiement :" FontWeight="SemiBold" FontSize="12" Opacity="0.6" HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding VenteDetails.ModePaiement}" FontWeight="Medium" FontSize="14" HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding VenteDetails.Statut, StringFormat='Statut : {0}'}" Opacity="0.8" FontSize="12" HorizontalAlignment="Right" />
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Liste des articles -->
+                        <TextBlock Text="Articles commandés :" FontWeight="SemiBold" Margin="0,0,0,8" />
+                        <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="4" Padding="0" Margin="0,0,0,16">
+                            <ItemsControl ItemsSource="{Binding VenteDetails.Lignes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="12,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="60" />
+                                                    <ColumnDefinition Width="100" />
+                                                    <ColumnDefinition Width="110" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding NomProduit}" VerticalAlignment="Center" FontWeight="Medium" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Quantite, StringFormat='x{0}'}" VerticalAlignment="Center" TextAlignment="Center" />
+                                                <TextBlock Grid.Column="2" Text="{Binding PrixUnitaire, StringFormat={}{0:N0} FC}" VerticalAlignment="Center" TextAlignment="Right" Opacity="0.8" />
+                                                <TextBlock Grid.Column="3" Text="{Binding SousTotal, StringFormat={}{0:N0} FC}" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Right" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+
+                        <!-- Total -->
+                        <Grid Margin="0,0,0,24">
+                            <TextBlock Text="TOTAL PAYÉ :" Style="{StaticResource MaterialDesignHeadline6TextBlock}" FontWeight="Bold" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding VenteDetails.Total, StringFormat={}{0:N0} FC}"
+                                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <!-- Boutons d'action -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="FERMER" Style="{StaticResource MaterialDesignFlatButton}"
+                                    Command="{Binding FermerDetailsVenteCommand}" Margin="0,0,8,0" />
+                            <Button Content="IMPRIMER LA FACTURE" Style="{StaticResource PrimaryActionButton}"
+                                    Command="{Binding ImprimerFactureCommand}" />
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

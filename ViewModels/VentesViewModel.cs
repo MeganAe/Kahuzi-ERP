@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GestionCommerciale.Models;
 using GestionCommerciale.Services;
+using Microsoft.Win32;
 
 namespace GestionCommerciale.ViewModels;
 
@@ -25,8 +26,13 @@ public partial class VentesViewModel : ViewModelBase
     private readonly ProduitService _produitService = new();
     private readonly ClientService _clientService = new();
 
+    private List<Vente> _toutesLesVentes = new();
+
     [ObservableProperty]
     private ObservableCollection<Vente> ventes = new();
+
+    [ObservableProperty]
+    private string texteRecherche = string.Empty;
 
     [ObservableProperty]
     private ObservableCollection<Produit> produitsDisponibles = new();
@@ -52,6 +58,12 @@ public partial class VentesViewModel : ViewModelBase
     [ObservableProperty]
     private bool afficherFormulaire;
 
+    [ObservableProperty]
+    private bool afficherDetailsVente;
+
+    [ObservableProperty]
+    private Vente? venteDetails;
+
     public decimal TotalPanier => Panier.Sum(l => l.SousTotal);
 
     public List<string> ModePaiementListe { get; } = new() { "Espèces", "Mobile Money", "Virement", "Carte" };
@@ -72,7 +84,8 @@ public partial class VentesViewModel : ViewModelBase
         MessageErreur = null;
         try
         {
-            Ventes = new ObservableCollection<Vente>(await _venteService.GetAllAsync());
+            _toutesLesVentes = await _venteService.GetAllAsync();
+            AppliquerFiltre();
         }
         catch (Exception ex)
         {
@@ -82,6 +95,24 @@ public partial class VentesViewModel : ViewModelBase
         {
             IsBusy = false;
         }
+    }
+
+    partial void OnTexteRechercheChanged(string value) => AppliquerFiltre();
+
+    private void AppliquerFiltre()
+    {
+        var filtre = _toutesLesVentes.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(TexteRecherche))
+        {
+            var recherche = TexteRecherche.Trim();
+            filtre = filtre.Where(v =>
+                v.Numero.Contains(recherche, StringComparison.OrdinalIgnoreCase) ||
+                (v.Client?.NomComplet.Contains(recherche, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                v.ModePaiement.Contains(recherche, StringComparison.OrdinalIgnoreCase));
+        }
+
+        Ventes = new ObservableCollection<Vente>(filtre);
     }
 
     [RelayCommand]
@@ -103,6 +134,57 @@ public partial class VentesViewModel : ViewModelBase
 
     [RelayCommand]
     private void FermerFormulaire() => AfficherFormulaire = false;
+
+    [RelayCommand]
+    private void VoirDetailsVente(Vente? vente)
+    {
+        if (vente is null) return;
+        VenteDetails = vente;
+        AfficherDetailsVente = true;
+    }
+
+    [RelayCommand]
+    private void FermerDetailsVente() => AfficherDetailsVente = false;
+
+    [RelayCommand]
+    private void ImprimerFacture(Vente? vente)
+    {
+        var v = vente ?? VenteDetails;
+        if (v is null) return;
+
+        try
+        {
+            ImpressionService.ImprimerFacture(v);
+        }
+        catch (Exception ex)
+        {
+            MessageErreur = $"Erreur d'impression : {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
+    private void ExporterCsv()
+    {
+        try
+        {
+            var sfd = new SaveFileDialog
+            {
+                Filter = "Fichier CSV (*.csv)|*.csv",
+                FileName = $"Journal_Ventes_Kahuzi_{DateTime.Now:yyyyMMdd_HHmm}.csv",
+                Title = "Exporter le journal des ventes"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                ExportService.ExporterVentesCsv(Ventes, sfd.FileName);
+                NotificationService.AfficherMessage("✓ Journal des ventes exporté en CSV avec succès !");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageErreur = $"Erreur d'exportation : {ex.Message}";
+        }
+    }
 
     [RelayCommand]
     private void AjouterAuPanier()
@@ -185,9 +267,24 @@ public partial class VentesViewModel : ViewModelBase
                 }).ToList()
             };
 
-            await _venteService.CreerVenteAsync(vente);
+            var venteCreee = await _venteService.CreerVenteAsync(vente);
             AfficherFormulaire = false;
             await ChargerAsync();
+            NotificationService.AfficherMessage($"✓ Vente {venteCreee.Numero} enregistrée ({venteCreee.Total:N0} FC) !");
+
+            // Proposer d'imprimer la facture immédiatement
+            var rep = System.Windows.MessageBox.Show(
+                $"Vente {venteCreee.Numero} enregistrée avec succès !\n\nSouhaitez-vous imprimer la facture / reçu maintenant ?",
+                "Impression Facture - Kahuzi ERP",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Question);
+
+            if (rep == System.Windows.MessageBoxResult.Yes)
+            {
+                // Recharger avec client et lignes pour l'impression
+                var venteComplete = _toutesLesVentes.FirstOrDefault(v => v.Id == venteCreee.Id) ?? venteCreee;
+                ImpressionService.ImprimerFacture(venteComplete);
+            }
         }
         catch (Exception ex)
         {
@@ -204,11 +301,20 @@ public partial class VentesViewModel : ViewModelBase
     {
         if (vente is null) return;
 
+        var rep = System.Windows.MessageBox.Show(
+            $"Êtes-vous sûr de vouloir annuler la vente {vente.Numero} ?\nLes articles seront réintégrés en stock.",
+            "Confirmation d'annulation",
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning);
+
+        if (rep != System.Windows.MessageBoxResult.Yes) return;
+
         IsBusy = true;
         try
         {
             await _venteService.AnnulerVenteAsync(vente.Id);
             await ChargerAsync();
+            NotificationService.AfficherMessage($"✓ Vente {vente.Numero} annulée.");
         }
         catch (Exception ex)
         {

@@ -4,62 +4,144 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="16" MaxWidth="640" HorizontalAlignment="Left">
+        <StackPanel Margin="16" MaxWidth="800" HorizontalAlignment="Left">
 
-            <TextBlock Text="Paramètres" Style="{StaticResource SectionTitle}" />
+            <!-- Titre de la page -->
+            <StackPanel Margin="0,0,0,16">
+                <TextBlock Text="Paramètres de l'Application" Style="{StaticResource SectionTitle}" Margin="0,0,0,4" />
+                <TextBlock Text="Configurez les informations d'entreprise, devises et sauvegardes." Opacity="0.7" FontSize="13" />
+            </StackPanel>
 
+            <!-- Messages d'état -->
             <TextBlock Text="{Binding MessageConfirmation}"
-                       Foreground="#2E7D32" FontWeight="Medium"
-                       Margin="0,0,0,8" TextWrapping="Wrap"
+                       Foreground="#10B981" FontWeight="Medium"
+                       Margin="0,0,0,12" TextWrapping="Wrap"
                        Visibility="{Binding MessageConfirmation, Converter={StaticResource StringToVisibilityConverter}}" />
             <TextBlock Text="{Binding MessageErreur}"
                        Foreground="{DynamicResource ValidationErrorBrush}"
-                       Margin="0,0,0,8" TextWrapping="Wrap"
+                       Margin="0,0,0,12" TextWrapping="Wrap"
                        Visibility="{Binding MessageErreur, Converter={StaticResource StringToVisibilityConverter}}" />
 
-            <!-- Informations de l'entreprise -->
-            <materialDesign:Card Style="{StaticResource SectionCard}">
+            <!-- Carte 1 : Profil & Identité Entreprise -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <materialDesign:PackIcon Kind="OfficeBuilding" VerticalAlignment="Center" />
-                        <TextBlock Text="Informations de l'entreprise" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <materialDesign:PackIcon Kind="Domain" Width="24" Height="24" Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center" />
+                        <TextBlock Text="Identité de l'Entreprise (Pour Factures &amp; Reçus)" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
                     </StackPanel>
 
-                    <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             materialDesign:HintAssist.Hint="Nom de l'entreprise"
-                             Text="{Binding NomEntreprise, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,16" />
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Nom officiel de l'entreprise *"
+                                 Text="{Binding NomEntreprise, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Slogan / Activité"
+                                 Text="{Binding Slogan, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Ville (ex : Bukavu)"
+                                 Text="{Binding Ville, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Pays (ex : RD Congo)"
+                                 Text="{Binding Pays, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
 
                     <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             materialDesign:HintAssist.Hint="Devise (ex : FC, USD)"
-                             Text="{Binding Devise, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,16" />
+                             materialDesign:HintAssist.Hint="Adresse physique du commerce"
+                             Text="{Binding Adresse, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
 
-                    <Button Content="ENREGISTRER" HorizontalAlignment="Right"
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Téléphone / Contact"
+                                 Text="{Binding Telephone, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Email professionnel"
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Mentions légales (RCCM / Id.Nat / NIF)"
+                             Text="{Binding NifRccm, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,16" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Carte 2 : Devises & Préférences de Gestion -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <materialDesign:PackIcon Kind="CashSync" Width="24" Height="24" Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center" />
+                        <TextBlock Text="Devises &amp; Paramètres Commerciaux" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Devise principale (ex: FC)"
+                                 Text="{Binding Devise, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Taux indicatif (1 USD en FC)"
+                                 Text="{Binding TauxUsdFc, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="4" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Seuil d'alerte stock défaut"
+                                 Text="{Binding SeuilAlerteDefaut, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <Button Content="ENREGISTRER LES PARAMÈTRES" HorizontalAlignment="Right"
                             Style="{StaticResource PrimaryActionButton}"
                             Command="{Binding EnregistrerCommand}" />
                 </StackPanel>
             </materialDesign:Card>
 
-            <!-- Sauvegarde et restauration -->
-            <materialDesign:Card Style="{StaticResource SectionCard}">
+            <!-- Carte 3 : Sauvegarde & Sécurité des Données -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,24">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <materialDesign:PackIcon Kind="DatabaseCogOutline" VerticalAlignment="Center" />
-                        <TextBlock Text="Sauvegarde &amp; restauration" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                        <materialDesign:PackIcon Kind="DatabaseCheckOutline" Width="24" Height="24" Foreground="#10B981" VerticalAlignment="Center" />
+                        <TextBlock Text="Sauvegarde &amp; Sécurité de la Base de Données" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
                     </StackPanel>
 
-                    <TextBlock Text="Toutes vos données (produits, clients, ventes) sont stockées localement dans une base SQLite. Faites des sauvegardes régulières pour éviter toute perte."
-                               TextWrapping="Wrap" Opacity="0.7" Margin="0,0,0,16" />
+                    <TextBlock Text="Toutes vos données commerciales (ventes, articles, clients, stocks) sont protégées localement sur cette machine. Pensez à exporter régulièrement une copie de sécurité sur clé USB ou disque externe."
+                               TextWrapping="Wrap" Opacity="0.75" Margin="0,0,0,12" />
 
-                    <TextBlock Text="{Binding CheminBaseDeDonnees, StringFormat='Emplacement : {0}'}"
-                               FontSize="11" Opacity="0.5" TextWrapping="Wrap" Margin="0,0,0,16" />
+                    <Border Background="{DynamicResource MaterialDesignDivider}" CornerRadius="6" Padding="12" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="{Binding CheminBaseDeDonnees, StringFormat='Fichier actif : {0}'}"
+                                       FontSize="11" TextWrapping="Wrap" Opacity="0.9" FontFamily="Consolas" />
+                            <TextBlock Text="{Binding TailleBaseDeDonnees, StringFormat='Taille de la base : {0}'}"
+                                       FontSize="11" FontWeight="Medium" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Border>
 
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="SAUVEGARDER" Style="{StaticResource PrimaryActionButton}"
+                        <Button Content="SAUVEGARDER LA BASE" Style="{StaticResource PrimaryActionButton}"
                                 Command="{Binding SauvegarderBaseCommand}" />
-                        <Button Content="RESTAURER" Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Margin="8,4,4,4"
+                        <Button Content="RESTAURER UNE SAUVEGARDE" Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="12,0,0,0"
                                 Command="{Binding RestaurerBaseCommand}" />
                     </StackPanel>
                 </StackPanel>

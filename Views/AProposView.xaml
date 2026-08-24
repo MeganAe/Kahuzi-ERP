@@ -3,42 +3,84 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="420">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16" MaxWidth="680" HorizontalAlignment="Left">
 
-            <Image Source="pack://application:,,,/Resources/kahuzi_emblem_white.png"
-                   Width="80" Height="80"
-                   RenderOptions.BitmapScalingMode="HighQuality">
-                <Image.Effect>
-                    <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="8" ShadowDepth="0" />
-                </Image.Effect>
-            </Image>
+            <!-- En-tête -->
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="À Propos de Kahuzi ERP" Style="{StaticResource SectionTitle}" Margin="0,0,0,4" />
+                <TextBlock Text="Informations sur la plateforme et les mentions légales." Opacity="0.7" FontSize="13" />
+            </StackPanel>
 
-            <TextBlock Text="{Binding NomApplication}" FontSize="26" FontWeight="Bold"
-                       HorizontalAlignment="Center" Margin="0,16,0,0"
-                       Foreground="{DynamicResource HeadingForegroundBrush}" />
+            <!-- Carte Principale de Présentation -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <Grid Margin="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Gestion commerciale — Bukavu Enterprise" Opacity="0.7"
-                       HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    <Border Grid.Column="0" Width="80" Height="80" CornerRadius="12"
+                            Background="#F8FAFC" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1"
+                            Margin="0,0,20,0" VerticalAlignment="Center">
+                        <Image Source="pack://application:,,,/Resources/kahuzi_taskbar_icon.png"
+                               Width="68" Height="68"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               RenderOptions.BitmapScalingMode="HighQuality" />
+                    </Border>
 
-            <TextBlock Text="{Binding Version, StringFormat='Version {0}'}" Opacity="0.5"
-                       FontSize="12" HorizontalAlignment="Center" Margin="0,8,0,24" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="KAHUZI ERP" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                        <TextBlock Text="Progiciel de Gestion Commerciale — Bukavu Enterprise" FontSize="13" Opacity="0.8" Margin="0,2,0,4" />
+                        <TextBlock Text="Version 1.0.0 (Édition Professionnelle)" FontSize="12" Opacity="0.6" />
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0">
-                <StackPanel HorizontalAlignment="Center">
-                    <TextBlock Text="Conçue par Metoushela Walker" FontWeight="Bold" FontSize="16"
-                               HorizontalAlignment="Center" TextAlignment="Center" />
-                    <TextBlock Text="Développeur logiciel — Bukavu, RDC" Opacity="0.7"
-                               HorizontalAlignment="Center" Margin="0,4,0,0" />
-                    <TextBlock HorizontalAlignment="Center" Margin="0,16,0,0" TextAlignment="Center" TextWrapping="Wrap"
-                               Text="Merci d'utiliser Kahuzi ERP. Cette application a été développée sur mesure pour la gestion commerciale au quotidien : stock, clients et ventes en un seul endroit." />
+            <!-- Carte Détails & Caractéristiques -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="À Propos du Système" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    
+                    <TextBlock Text="Kahuzi ERP est une solution moderne et robuste spécialement conçue pour les commerces, boutiques, grossistes et entreprises de la ville de Bukavu et de toute la République Démocratique du Congo."
+                               TextWrapping="Wrap" LineHeight="20" Opacity="0.85" Margin="0,0,0,16" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Architecture &amp; Sécurité" FontWeight="SemiBold" Margin="0,0,0,4" />
+                            <TextBlock Text="• Moteur local SQLite haute performance&#x0a;• Aucune dépendance internet requise&#x0a;• Sauvegardes instantanées sécurisées"
+                                       LineHeight="20" Opacity="0.75" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="Fonctionnalités Clés" FontWeight="SemiBold" Margin="0,0,0,4" />
+                            <TextBlock Text="• Suivi de stock avec alertes de seuil&#x0a;• Facturation &amp; impression de reçus&#x0a;• Analyse financière &amp; calcul de marge"
+                                       LineHeight="20" Opacity="0.75" />
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </materialDesign:Card>
 
-            <TextBlock HorizontalAlignment="Center" Opacity="0.4" FontSize="11" Margin="0,24,0,0">
-                <Run Text="© " /><Run Text="{Binding AnneeCourante}" /><Run Text=" Kahuzi ERP. Tous droits réservés." />
-            </TextBlock>
+            <!-- Carte Concepteur & Droits -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Conception &amp; Ingénierie" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    
+                    <TextBlock Text="Développé par Metoushela Walker" FontWeight="Bold" FontSize="14" Margin="0,0,0,2" />
+                    <TextBlock Text="Développeur Logiciel &amp; Ingénieur Systèmes — Bukavu, Sud-Kivu, RD Congo" Opacity="0.7" FontSize="12" Margin="0,0,0,12" />
+
+                    <Separator Margin="0,0,0,12" />
+
+                    <TextBlock Text="© 2026 Kahuzi ERP. Tous droits réservés. Développé avec passion pour l'écosystème commercial du Kivu."
+                               FontSize="11" Opacity="0.5" TextAlignment="Center" />
+                </StackPanel>
+            </materialDesign:Card>
 
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

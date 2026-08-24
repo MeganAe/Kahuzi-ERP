@@ -6,7 +6,17 @@ namespace GestionCommerciale.Services;
 public class AppSettings
 {
     public string NomEntreprise { get; set; } = "Kahuzi ERP";
+    public string Slogan { get; set; } = "Gestion Commerciale & Progiciel d'Entreprise";
+    public string Ville { get; set; } = "Bukavu";
+    public string Pays { get; set; } = "RD Congo";
+    public string Adresse { get; set; } = "Avenue Patrice Lumumba, Ibanda, Bukavu";
+    public string Telephone { get; set; } = "+243 999 000 000";
+    public string Email { get; set; } = "contact@kahuzierp.cd";
+    public string NifRccm { get; set; } = "RCCM: CD/BKV/2026-B - Id.Nat: 01-G4700";
     public string Devise { get; set; } = "FC";
+    public decimal TauxUsdFc { get; set; } = 2850;
+    public int SeuilAlerteDefaut { get; set; } = 5;
+    public bool ActiverConfirmationSuppression { get; set; } = true;
 }
 
 public class SettingsService

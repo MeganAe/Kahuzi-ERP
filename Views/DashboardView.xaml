@@ -3,60 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="16">
 
-            <TextBlock Text="Tableau de bord — Kahuzi ERP" Style="{StaticResource SectionTitle}" Margin="16,16,16,0" />
+            <!-- En-tête avec titre et sélecteur de période -->
+            <Grid Margin="16,8,16,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <!-- Cartes statistiques -->
-            <UniformGrid Columns="4" Margin="8">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="Tableau de bord — Kahuzi ERP" Style="{StaticResource SectionTitle}" Margin="0,0,0,4" />
+                    <TextBlock Text="Aperçu des performances commerciales et de l'état du stock" Opacity="0.7" FontSize="13" />
+                </StackPanel>
 
+                <!-- Filtre de période -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="CalendarClock" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                    <ComboBox ItemsSource="{Binding PeriodesFiltre}"
+                              SelectedItem="{Binding PeriodeChoisie}"
+                              Width="180"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              materialDesign:HintAssist.Hint="Période" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Cartes statistiques financières et opérationnelles (Disposition horizontale 4 colonnes) -->
+            <UniformGrid Columns="4" Margin="8,0,8,12">
+
+                <!-- Chiffre d'affaires -->
                 <materialDesign:Card Style="{StaticResource SectionCard}">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="PackageVariantClosed" Width="28" Height="28" Foreground="{DynamicResource PrimaryHueMidBrush}" />
-                        <TextBlock Text="{Binding NombreProduits}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" />
-                        <TextBlock Text="Produits en stock" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
+                        <materialDesign:PackIcon Kind="CashMultiple" Width="28" Height="28" Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                        <TextBlock Text="{Binding ChiffreAffairesTotal, StringFormat={}{0:N0} FC}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="Chiffre d'affaires" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
                     </StackPanel>
                 </materialDesign:Card>
 
+                <!-- Bénéfice Net Estimé -->
                 <materialDesign:Card Style="{StaticResource SectionCard}">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="AccountGroup" Width="28" Height="28" Foreground="{DynamicResource PrimaryHueMidBrush}" />
-                        <TextBlock Text="{Binding NombreClients}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" />
-                        <TextBlock Text="Clients enregistrés" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
+                        <materialDesign:PackIcon Kind="TrendingUp" Width="28" Height="28" Foreground="#10B981" />
+                        <TextBlock Text="{Binding BeneficeNetTotal, StringFormat={}{0:N0} FC}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Foreground="#10B981" FontWeight="Bold" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="Marge / Bénéfice net" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
                     </StackPanel>
                 </materialDesign:Card>
 
+                <!-- Ventes réalisées -->
                 <materialDesign:Card Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <materialDesign:PackIcon Kind="CartOutline" Width="28" Height="28" Foreground="{DynamicResource PrimaryHueMidBrush}" />
-                        <TextBlock Text="{Binding NombreVentes}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" />
-                        <TextBlock Text="Ventes réalisées" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
+                        <TextBlock Text="{Binding NombreVentes}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="Ventes enregistrées" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
                     </StackPanel>
                 </materialDesign:Card>
 
+                <!-- Valeur du Stock -->
                 <materialDesign:Card Style="{StaticResource SectionCard}">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="CashMultiple" Width="28" Height="28" Foreground="{DynamicResource SecondaryHueMidBrush}" />
-                        <TextBlock Text="{Binding ChiffreAffairesTotal, StringFormat={}{0:N0} FC}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" />
-                        <TextBlock Text="Chiffre d'affaires" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
+                        <materialDesign:PackIcon Kind="StorefrontOutline" Width="28" Height="28" Foreground="{DynamicResource SecondaryHueMidBrush}" />
+                        <TextBlock Text="{Binding ValeurStockAchat, StringFormat={}{0:N0} FC}" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Foreground="{DynamicResource MaterialDesignBody}" FontWeight="Bold" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="Valeur du stock (Achat)" Style="{StaticResource MaterialDesignBody2TextBlock}" Opacity="0.7" />
                     </StackPanel>
                 </materialDesign:Card>
 
             </UniformGrid>
 
-            <Grid Margin="8,8,8,8">
+            <!-- Deuxième rangée : Alertes, Top Ventes et Dernières Ventes (3 colonnes) -->
+            <Grid Margin="8,0,8,16">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Alertes de stock -->
-                <materialDesign:Card Grid.Column="0" Style="{StaticResource SectionCard}">
+                <materialDesign:Card Grid.Column="0" Style="{StaticResource SectionCard}" Margin="8">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <materialDesign:PackIcon Kind="AlertCircleOutline" Foreground="{DynamicResource ValidationErrorBrush}" VerticalAlignment="Center" />
-                            <TextBlock Text="Alertes de stock" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                            <TextBlock Text="Alertes de stock" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
                         </StackPanel>
 
                         <ItemsControl ItemsSource="{Binding ProduitsAlerteListe}">
@@ -68,26 +95,67 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Nom}" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Nom}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                             <TextBlock Grid.Column="1" Text="{Binding QuantiteStock, StringFormat='Reste : {0}'}"
-                                                       Foreground="{DynamicResource ValidationErrorBrush}" FontWeight="Medium" />
+                                                       Foreground="{DynamicResource ValidationErrorBrush}" FontWeight="Medium" Margin="8,0,0,0" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <TextBlock Text="Aucune alerte " Opacity="0.6" Margin="0,8,0,0"
-                                   Visibility="{Binding ProduitsEnAlerte, Converter={StaticResource ZeroToVisibleConverter}}" />
+                        <!-- Message état sans emoji, avec icône Material Design -->
+                        <StackPanel Orientation="Horizontal" Opacity="0.6" Margin="0,12,0,0"
+                                    Visibility="{Binding ProduitsEnAlerte, Converter={StaticResource ZeroToVisibleConverter}}">
+                            <materialDesign:PackIcon Kind="CheckCircleOutline" VerticalAlignment="Center" Foreground="#10B981" Margin="0,0,6,0" />
+                            <TextBlock Text="Stock optimal, aucune alerte" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Top 5 des Meilleures Ventes -->
+                <materialDesign:Card Grid.Column="1" Style="{StaticResource SectionCard}" Margin="8">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <materialDesign:PackIcon Kind="StarOutline" Foreground="#F59E0B" VerticalAlignment="Center" />
+                            <TextBlock Text="Meilleures Ventes" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding TopProduitsVendus}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Nom}" FontWeight="Medium" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding QuantiteVendue, StringFormat='Qté vendue : {0}'}" Opacity="0.7" FontSize="11" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="{Binding TotalVente, StringFormat={}{0:N0} FC}"
+                                                       VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="8,0,0,0" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <StackPanel Orientation="Horizontal" Opacity="0.6" Margin="0,12,0,0"
+                                    Visibility="{Binding TopProduitsVendus.Count, Converter={StaticResource ZeroToVisibleConverter}}">
+                            <materialDesign:PackIcon Kind="InformationOutline" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <TextBlock Text="Aucune vente sur la période" VerticalAlignment="Center" />
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
 
                 <!-- Dernières ventes -->
-                <materialDesign:Card Grid.Column="1" Style="{StaticResource SectionCard}">
+                <materialDesign:Card Grid.Column="2" Style="{StaticResource SectionCard}" Margin="8">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" />
-                            <TextBlock Text="Dernières ventes" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" />
+                            <TextBlock Text="Dernières Ventes" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
                         </StackPanel>
 
                         <ItemsControl ItemsSource="{Binding DernieresVentes}">
@@ -100,11 +168,11 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding Numero}" FontWeight="Medium" />
-                                                <TextBlock Text="{Binding Client.NomComplet}" Opacity="0.7" FontSize="12" />
+                                                <TextBlock Text="{Binding Numero}" FontWeight="Medium" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding Client.NomComplet, TargetNullValue='Client Comptant'}" Opacity="0.7" FontSize="12" TextTrimming="CharacterEllipsis" />
                                             </StackPanel>
                                             <TextBlock Grid.Column="1" Text="{Binding Total, StringFormat={}{0:N0} FC}"
-                                                       VerticalAlignment="Center" FontWeight="Medium" />
+                                                       VerticalAlignment="Center" FontWeight="Medium" Margin="8,0,0,0" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -112,6 +180,7 @@
                         </ItemsControl>
                     </StackPanel>
                 </materialDesign:Card>
+
             </Grid>
 
         </StackPanel>

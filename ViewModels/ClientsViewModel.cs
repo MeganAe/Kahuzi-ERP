@@ -152,6 +152,7 @@ public partial class ClientsViewModel : ViewModelBase
 
             AfficherFormulaire = false;
             await ChargerAsync();
+            NotificationService.AfficherMessage(ModeEdition ? "✓ Fiche client mise à jour !" : "✓ Nouveau client enregistré avec succès !");
         }
         catch (Exception ex)
         {
@@ -181,6 +182,7 @@ public partial class ClientsViewModel : ViewModelBase
         {
             await _clientService.DeleteAsync(client.Id);
             await ChargerAsync();
+            NotificationService.AfficherMessage("✓ Client supprimé du répertoire.");
         }
         catch (Exception ex)
         {
@@ -189,6 +191,30 @@ public partial class ClientsViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ExporterCsv()
+    {
+        try
+        {
+            var sfd = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Fichier CSV (*.csv)|*.csv",
+                FileName = $"Repertoire_Clients_Kahuzi_{DateTime.Now:yyyyMMdd_HHmm}.csv",
+                Title = "Exporter le répertoire des clients"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                ExportService.ExporterClientsCsv(Clients, sfd.FileName);
+                NotificationService.AfficherMessage("✓ Répertoire des clients exporté en CSV avec succès !");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageErreur = $"Erreur d'exportation : {ex.Message}";
         }
     }
 }

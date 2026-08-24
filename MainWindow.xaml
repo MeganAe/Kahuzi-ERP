@@ -9,10 +9,10 @@
         Icon="pack://application:,,,/Resources/kahuzi_taskbar_icon.png"
         WindowState="Normal"
         WindowStartupLocation="CenterScreen"
-        Height="720"
-        Width="1200"
-        MinHeight="560"
-        MinWidth="960"
+        Height="740"
+        Width="1240"
+        MinHeight="620"
+        MinWidth="1024"
         WindowStyle="None"
         ResizeMode="CanResize"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -153,63 +153,57 @@
                                    Foreground="White"/>
                     </StackPanel>
 
-                    <!-- Switch thème + bouton paramètres en bas -->
-                    <StackPanel DockPanel.Dock="Bottom"
-                                Margin="16"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <materialDesign:PackIcon Kind="WeatherSunny"
-                                                 VerticalAlignment="Center"
-                                                 Margin="0,0,4,0"/>
-                        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
-                                      Command="{Binding BasculerThemeCommand}"/>
-                        <materialDesign:PackIcon Kind="WeatherNight"
-                                                 VerticalAlignment="Center"
-                                                 Margin="4,0,12,0"/>
+                    <!-- Barre inférieure : switch thème & bouton paramètres -->
+                    <Border DockPanel.Dock="Bottom"
+                            BorderBrush="#20FFFFFF"
+                            BorderThickness="0,1,0,0"
+                            Padding="16,12"
+                            Margin="8,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Bouton engrenage : ouvre Paramètres / Aide / À propos -->
-                        <materialDesign:PopupBox StaysOpen="False"
-                                                  PlacementMode="TopAndAlignCentres"
-                                                  ToolTip="Plus d'options"
-                                                  Foreground="White">
-                            <materialDesign:PopupBox.ToggleContent>
-                                <materialDesign:PackIcon Kind="CogOutline" Width="20" Height="20"/>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <StackPanel>
-                                <Button Content="Paramètres"
-                                        HorizontalContentAlignment="Left"
-                                        Command="{Binding NaviguerVersCommand}"
-                                        CommandParameter="Parametres">
-                                    <Button.Style>
-                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                                <Button Content="Aide"
-                                        HorizontalContentAlignment="Left"
-                                        Command="{Binding NaviguerVersCommand}"
-                                        CommandParameter="Aide">
-                                    <Button.Style>
-                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                                <Button Content="À propos"
-                                        HorizontalContentAlignment="Left"
-                                        Command="{Binding NaviguerVersCommand}"
-                                        CommandParameter="APropos">
-                                    <Button.Style>
-                                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-                                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                            </StackPanel>
-                        </materialDesign:PopupBox>
-                    </StackPanel>
+                            <!-- Switch Thème Sombre / Clair épuré sans symboles superflus -->
+                            <ToggleButton Grid.Column="0"
+                                          Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                          IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
+                                          Command="{Binding BasculerThemeCommand}"
+                                          ToolTip="Basculer Mode Sombre / Clair"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center" />
+
+                            <!-- Bouton engrenage : ouvre Paramètres / Aide / À propos -->
+                            <materialDesign:PopupBox Grid.Column="1"
+                                                      StaysOpen="False"
+                                                      PlacementMode="TopAndAlignCentres"
+                                                      ToolTip="Paramètres et Options"
+                                                      Foreground="White"
+                                                      VerticalAlignment="Center">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="CogOutline" Width="22" Height="22" Opacity="0.9" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel MinWidth="150">
+                                    <Button Content="Paramètres"
+                                            HorizontalContentAlignment="Left"
+                                            Command="{Binding NaviguerVersCommand}"
+                                            CommandParameter="Parametres"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                    <Button Content="Aide"
+                                            HorizontalContentAlignment="Left"
+                                            Command="{Binding NaviguerVersCommand}"
+                                            CommandParameter="Aide"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                    <Button Content="À propos"
+                                            HorizontalContentAlignment="Left"
+                                            Command="{Binding NaviguerVersCommand}"
+                                            CommandParameter="APropos"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </Grid>
+                    </Border>
 
                     <!-- Menu de navigation -->
                     <ListBox x:Name="NavListBox"
@@ -271,6 +265,14 @@
             <ContentControl Grid.Row="1"
                     Grid.Column="1"
                             Content="{Binding CurrentViewModel}"/>
+
+            <!-- Notifications Toast / Snackbar Material Design -->
+            <materialDesign:Snackbar x:Name="MainSnackbar"
+                                     Grid.Row="1"
+                                     Grid.Column="1"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Bottom"
+                                     Margin="0,0,24,24" />
         </Grid>
     </materialDesign:DialogHost>
 </Window>

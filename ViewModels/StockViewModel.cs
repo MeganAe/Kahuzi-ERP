@@ -184,6 +184,7 @@ public partial class StockViewModel : ViewModelBase
 
             AfficherFormulaire = false;
             await ChargerAsync();
+            NotificationService.AfficherMessage(ModeEdition ? "✓ Produit modifié avec succès !" : "✓ Nouveau produit ajouté au stock !");
         }
         catch (Exception ex)
         {
@@ -213,6 +214,7 @@ public partial class StockViewModel : ViewModelBase
         {
             await _produitService.DeleteAsync(produit.Id);
             await ChargerAsync();
+            NotificationService.AfficherMessage("✓ Produit supprimé du stock.");
         }
         catch (Exception ex)
         {
@@ -221,6 +223,30 @@ public partial class StockViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ExporterCsv()
+    {
+        try
+        {
+            var sfd = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Fichier CSV (*.csv)|*.csv",
+                FileName = $"Inventaire_Stock_Kahuzi_{DateTime.Now:yyyyMMdd_HHmm}.csv",
+                Title = "Exporter l'inventaire du stock"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                ExportService.ExporterProduitsCsv(Produits, sfd.FileName);
+                NotificationService.AfficherMessage("✓ Inventaire du stock exporté en CSV avec succès !");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageErreur = $"Erreur d'exportation : {ex.Message}";
         }
     }
 }

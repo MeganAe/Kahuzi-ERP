@@ -13,6 +13,9 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        var queue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue(TimeSpan.FromSeconds(3));
+        MainSnackbar.MessageQueue = queue;
+        NotificationService.MessageQueue = queue;
         DataContext = new MainViewModel();
         SourceInitialized += (_, _) => ThemeService.ApplyTitleBarTheme(this, false);
         StateChanged += (_, _) => MettreAJourIconeAgrandir();

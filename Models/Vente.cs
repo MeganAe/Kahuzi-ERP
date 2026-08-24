@@ -58,4 +58,7 @@ public class LigneVente
 
     [NotMapped]
     public decimal SousTotal => Quantite * PrixUnitaire;
+
+    [NotMapped]
+    public string NomProduit => Produit?.Nom ?? $"Article #{ProduitId}";
 }

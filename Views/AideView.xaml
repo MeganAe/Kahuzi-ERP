@@ -4,74 +4,64 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="16" MaxWidth="720" HorizontalAlignment="Left">
+        <StackPanel Margin="16" MaxWidth="800" HorizontalAlignment="Left">
 
-            <TextBlock Text="Aide" Style="{StaticResource SectionTitle}" />
-            <TextBlock Text="Guide rapide d'utilisation de Kahuzi ERP." Opacity="0.7" Margin="0,0,0,16" />
+            <!-- En-tête -->
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="Guide &amp; Manuel d'Utilisation" Style="{StaticResource SectionTitle}" Margin="0,0,0,4" />
+                <TextBlock Text="Retrouvez ici l'essentiel pour maîtriser toutes les fonctionnalités de Kahuzi ERP." Opacity="0.7" FontSize="13" />
+            </StackPanel>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}">
-                <Expander IsExpanded="True">
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard" VerticalAlignment="Center" />
-                            <TextBlock Text="Tableau de bord" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Expander.Header>
-                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
-                               Text="Vue d'ensemble de votre activité : nombre de produits en stock, clients enregistrés, ventes réalisées et chiffre d'affaires total. Les alertes de stock signalent les produits dont la quantité restante est faible." />
-                </Expander>
+            <!-- Guide 1 : Ventes et Facturation -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="CartCheck" Width="24" Height="24" Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center" />
+                        <TextBlock Text="1. Enregistrer une Vente &amp; Imprimer une Facture" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <TextBlock Text="• Rendez-vous dans le module « Ventes » puis cliquez sur « + NOUVELLE VENTE ».&#x0a;• Choisissez le client (ou laissez client comptant), le mode de paiement (Espèces, Mobile Money, etc.).&#x0a;• Ajoutez les articles et quantités souhaités dans le panier.&#x0a;• Cliquez sur « VALIDER LA VENTE » : le stock est déduit automatiquement et vous pouvez imprimer le reçu immédiatement.&#x0a;• À tout moment, vous pouvez cliquer sur l'icône de facture dans la liste pour réimprimer un reçu passé."
+                               LineHeight="22" Opacity="0.85" TextWrapping="Wrap" />
+                </StackPanel>
             </materialDesign:Card>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}">
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PackageVariantClosed" VerticalAlignment="Center" />
-                            <TextBlock Text="Stock" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Expander.Header>
-                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
-                               Text="Ajoutez, modifiez ou supprimez vos produits. Chaque produit possède une référence unique, un prix de vente et une quantité en stock. Le système vous alerte automatiquement lorsqu'un produit passe sous le seuil défini." />
-                </Expander>
+            <!-- Guide 2 : Gestion du Stock -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="PackageVariantClosed" Width="24" Height="24" Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center" />
+                        <TextBlock Text="2. Gestion du Stock &amp; Alertes de Seuil" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <TextBlock Text="• Dans l'onglet « Stock », ajoutez vos articles avec leur référence, prix d'achat, prix de vente et quantité.&#x0a;• Définissez un « Seuil d'alerte » : lorsque le stock d'un produit passe en dessous de ce seuil, il s'affiche en rouge et remonte dans les alertes du tableau de bord.&#x0a;• Utilisez le bouton « EXPORTER CSV » pour exporter l'inventaire complet dans Excel."
+                               LineHeight="22" Opacity="0.85" TextWrapping="Wrap" />
+                </StackPanel>
             </materialDesign:Card>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}">
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountGroup" VerticalAlignment="Center" />
-                            <TextBlock Text="Clients" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Expander.Header>
-                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
-                               Text="Gérez votre fichier client : nom, téléphone, email et adresse. La recherche en haut de la page vous permet de retrouver rapidement un client existant." />
-                </Expander>
+            <!-- Guide 3 : Clients & Relations -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center" />
+                        <TextBlock Text="3. Répertoire des Clients" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <TextBlock Text="• Enregistrez vos clients fidèles ou partenaires commerciaux avec leurs coordonnées (téléphone, adresse).&#x0a;• Lors d'une vente, sélectionner un client permet d'associer la facture à son nom.&#x0a;• La barre de recherche permet de filtrer instantanément par nom ou numéro de téléphone."
+                               LineHeight="22" Opacity="0.85" TextWrapping="Wrap" />
+                </StackPanel>
             </materialDesign:Card>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}">
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="CartOutline" VerticalAlignment="Center" />
-                            <TextBlock Text="Ventes" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Expander.Header>
-                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
-                               Text="Créez une nouvelle vente en choisissant un client, un mode de paiement et les produits achetés. Le stock est automatiquement décrémenté à la validation. Annuler une vente restaure le stock des produits concernés." />
-                </Expander>
-            </materialDesign:Card>
+            <!-- Guide 4 : Sauvegardes & Sécurité -->
+            <materialDesign:Card Style="{StaticResource SectionCard}" Margin="0,0,0,24">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <materialDesign:PackIcon Kind="ShieldCheckOutline" Width="24" Height="24" Foreground="#10B981" VerticalAlignment="Center" />
+                        <TextBlock Text="4. Bonnes Pratiques de Sauvegarde" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                    </StackPanel>
 
-            <materialDesign:Card Style="{StaticResource SectionCard}">
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="CogOutline" VerticalAlignment="Center" />
-                            <TextBlock Text="Paramètres" Margin="8,0,0,0" FontWeight="Medium" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Expander.Header>
-                    <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Opacity="0.8"
-                               Text="Personnalisez le nom de votre entreprise et la devise utilisée. Pensez également à sauvegarder régulièrement votre base de données pour ne jamais perdre vos données." />
-                </Expander>
+                    <TextBlock Text="• Vos données sont stockées sur votre ordinateur sans passer par internet.&#x0a;• Il est recommandé d'aller dans « Paramètres » au moins une fois par semaine et de cliquer sur « SAUVEGARDER LA BASE » pour enregistrer une copie sur une clé USB ou un disque externe."
+                               LineHeight="22" Opacity="0.85" TextWrapping="Wrap" />
+                </StackPanel>
             </materialDesign:Card>
 
         </StackPanel>
